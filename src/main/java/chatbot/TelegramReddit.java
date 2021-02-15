@@ -73,7 +73,7 @@ public class TelegramReddit {
                     ioException.printStackTrace();
                 }
             }
-        }), 0, 10 * 59 * 1000);
+        }), 0, 1 * 59 * 1000);
         System.out.println("System is running...");
     }
 
