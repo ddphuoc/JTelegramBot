@@ -132,9 +132,12 @@ public class TelegramReddit {
                 bufferedWriter.flush();
                 bufferedWriter.close();
                 htbFriends.put (chatId, userName);
-                SendMessage(chatId, userName + " has been accepted !");
                 SendMessageStock(chatId);
                 SendMessageMention(chatId);
+                SendMessage(chatId, "Welcome " + userName + ", your id has been added !");
+                SendMessage(chatId, "I will please to send you latest news today when you request: /redlatest");
+                SendMessage(chatId, "Good luck !");
+                System.out.println("Added new friend: " + userName);
             }
         } catch (Exception exception) {
             System.out.println("Add friend error: " + exception.getMessage());
