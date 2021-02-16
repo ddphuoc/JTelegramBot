@@ -35,7 +35,7 @@ public class RedditTask extends TimerTask {
     @Override
     public void run() {
         Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("HHmmss");
+        DateFormat dateFormat = new SimpleDateFormat("HHmm");
         int checkTime = Integer.parseInt(dateFormat.format(date));
         if(checkTime != scheduleTime) {
             consumer.accept(false);
