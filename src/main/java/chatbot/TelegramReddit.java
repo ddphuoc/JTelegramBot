@@ -177,9 +177,9 @@ public class TelegramReddit {
         for(long id:htbFriends.keySet()) {
             if(chatId > 0 && id != chatId)
                 continue;
-            SendMessage(id, "Mention list");
+            SendMessage(id, "Best stock list");
             SendMessage(id, msg);
-            SendMessage(id, "===== mention end =====");
+            SendMessage(id, "===== stock end =====");
         }
     }
 
