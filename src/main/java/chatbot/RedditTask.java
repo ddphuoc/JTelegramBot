@@ -1,5 +1,7 @@
 package chatbot;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -72,6 +74,8 @@ public class RedditTask extends TimerTask {
     /// </summary>
     /// <returns></returns>
     private void RedditCall() throws IOException, InterruptedException {
+        FileUtils.cleanDirectory(new File(pythonData));
+
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("/bin/bash", "-c", "python3 ticker_counts.py");
         processBuilder.directory(new File(pythonSource));

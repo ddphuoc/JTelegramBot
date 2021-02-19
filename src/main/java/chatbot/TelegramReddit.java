@@ -57,6 +57,8 @@ public class TelegramReddit {
             }
             // return id of last processed update or confirm them all
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
+        }, exception -> {
+            System.out.println(exception.getMessage());
         });
         LoadBestStocks();
         LoadMentions();
@@ -186,24 +188,25 @@ public class TelegramReddit {
         }
     }
 
+    // Stop send mentions list
     private static void LoadMentions() throws IOException {
-        Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String file = dateFormat.format(date) + "_tick_df.csv";
-        Path path = Paths.get(pythonData, file);
-
-        if(!Files.exists(path))
-            return;
-
-        _lstMentions.clear();
-        // Load friend list
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(path.toFile().getPath()));
-        bufferedReader.lines().forEach(line -> {
-            if(line.trim().length() > 0) {
-                _lstMentions.add(line);
-            }
-        });
-        bufferedReader.close();
+//        Date date = Calendar.getInstance().getTime();
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        String file = dateFormat.format(date) + "_tick_df.csv";
+//        Path path = Paths.get(pythonData, file);
+//
+//        if(!Files.exists(path))
+//            return;
+//
+//        _lstMentions.clear();
+//        // Load friend list
+//        BufferedReader bufferedReader = new BufferedReader(new FileReader(path.toFile().getPath()));
+//        bufferedReader.lines().forEach(line -> {
+//            if(line.trim().length() > 0) {
+//                _lstMentions.add(line);
+//            }
+//        });
+//        bufferedReader.close();
     }
 
     private static void LoadBestStocks() throws IOException {
