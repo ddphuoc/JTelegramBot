@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class TelegramReddit {
 
@@ -150,42 +152,59 @@ public class TelegramReddit {
         try {
             SendResponse response = bot.execute(new SendMessage(chatId, message));
         } catch (Exception exception) {
-
+            System.out.println("Send message error: " + exception.getMessage());
         }
     }
+
+    private static BiConsumer<Long, String> consumer = (chatId, message) -> {
+        for(long id:htbFriends.keySet()) {
+            if(chatId > 0 && id != chatId)
+                continue;
+//                System.out.println(message);
+            SendMessage(id, message);
+        }
+    };
 
     private static void SendMessageMention(long chatId) {
         if (_lstMentions.size() <= 0)
             return;
-        String msg = "";
-        for (String stock:_lstMentions)
+
+        String header = _lstMentions.get(0) + "\n";
+
+        String msg = header;
+        for (String stock:_lstMentions.stream().skip(1).collect(Collectors.toList()))
         {
-            msg += stock + "\n";
+            if(msg.length() + stock.length() < 4096) {
+                msg += stock + "\n";
+            }
+            else {
+                consumer.accept(chatId, msg);
+                msg = header;
+                msg += stock + "\n";
+            }
         }
-        for(long id:htbFriends.keySet()) {
-            if(chatId > 0 && id != chatId)
-                continue;
-            SendMessage(id, "Mention list");
-            SendMessage(id, msg);
-            SendMessage(id, "===== mention end =====");
-        }
+        consumer.accept(chatId, msg);
     }
 
     private static void SendMessageStock(long chatId) {
         if (_lstBests.size() <= 0)
             return;
-        String msg = "";
-        for (String stock:_lstBests)
+
+        String header = _lstBests.get(0) + "\n";
+
+        String msg = header;
+        for (String stock:_lstBests.stream().skip(1).collect(Collectors.toList()))
         {
-            msg += stock + "\n";
+            if(msg.length() + stock.length() < 4096) {
+                msg += stock + "\n";
+            }
+            else {
+                consumer.accept(chatId, msg);
+                msg = header;
+                msg += stock + "\n";
+            }
         }
-        for(long id:htbFriends.keySet()) {
-            if(chatId > 0 && id != chatId)
-                continue;
-            SendMessage(id, "Best stock list");
-            SendMessage(id, msg);
-            SendMessage(id, "===== stock end =====");
-        }
+        consumer.accept(chatId, msg);
     }
 
     // Stop send mentions list
@@ -212,7 +231,7 @@ public class TelegramReddit {
     private static void LoadBestStocks() throws IOException {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String file = dateFormat.format(date) + "_df_best_25.csv";
+        String file = dateFormat.format(date) + "_financial_df.csv";
         Path path = Paths.get(pythonData, file);
 
         if(!Files.exists(path))
