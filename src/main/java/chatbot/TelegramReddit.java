@@ -37,15 +37,18 @@ public class TelegramReddit {
         LoadFriends();
 
         // Create your bot passing the token received from @BotFather
-        bot = new TelegramBot("1654024366:AAGFFapMC0bp445FPqBbeT5oe7WtaUahFzg");
+        bot = new TelegramBot("1654024366:AAHr04PpOZyqW10PLzgRAWKaAPFMR7_Vlgk");
 
         // Register for updates
         bot.setUpdatesListener(updates -> {
             // ... process updates
+            System.out.println(String.format("Message from server: %s", updates.size()));
             for(Update update: updates){
                 // Send messages
                 long chatId = update.message().chat().id();
                 String msg = update.message().text();
+                if(msg == null)
+                    continue;
                 if(msg.toLowerCase().equals("/redstock")) {
                     if(!htbFriends.containsKey(chatId)) {
                         AddFriend(chatId, update.message().from().firstName());
@@ -56,6 +59,7 @@ public class TelegramReddit {
                         SendMessageMention(chatId);
                     }
                 }
+                System.out.println(String.format("Message from %s: %s", update.message().from().firstName(), msg));
             }
             // return id of last processed update or confirm them all
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
