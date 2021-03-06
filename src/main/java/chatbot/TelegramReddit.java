@@ -28,6 +28,7 @@ public class TelegramReddit {
     private static String pythonData = "";
     private static List<String> _lstMentions = new ArrayList<>();
     private static  List<String> _lstBests = new ArrayList<>();
+    private static boolean boolTodayCheck = false;
 
     public static void main(String[] args) throws IOException {
         htbConfigs = new Hashtable<>();
