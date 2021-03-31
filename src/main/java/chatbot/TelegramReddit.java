@@ -2,6 +2,7 @@ package chatbot;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
@@ -38,7 +39,7 @@ public class TelegramReddit {
         LoadFriends();
 
         // Create your bot passing the token received from @BotFather
-        bot = new TelegramBot("1654024366:AAHr04PpOZyqW10PLzgRAWKaAPFMR7_Vlgk");
+        bot = new TelegramBot("1654024366:AAHcz8dxS6O0PZfJSxql2e9SZc4MzFv6cSw");
 
         // Register for updates
         bot.setUpdatesListener(updates -> {
@@ -46,13 +47,16 @@ public class TelegramReddit {
             System.out.println(String.format("Message from server: %s", updates.size()));
             for(Update update: updates){
                 // Send messages
-                long chatId = update.message().chat().id();
-                String msg = update.message().text();
+                Message updMsg = update.message();
+                if(updMsg == null)
+                    continue;
+                long chatId = updMsg.chat().id();
+                String msg = updMsg.text();
                 if(msg == null)
                     continue;
                 if(msg.toLowerCase().equals("/redstock")) {
                     if(!htbFriends.containsKey(chatId)) {
-                        AddFriend(chatId, update.message().from().firstName());
+                        AddFriend(chatId, updMsg.from().firstName());
                     }
                 } else if(msg.toLowerCase().equals("/redlatest")) {
                     if(htbFriends.containsKey(chatId)) {
@@ -60,7 +64,7 @@ public class TelegramReddit {
                         SendMessageMention(chatId);
                     }
                 }
-                System.out.println(String.format("Message from %s: %s", update.message().from().firstName(), msg));
+                System.out.println(String.format("Message from %s: %s", updMsg.from().firstName(), msg));
             }
             // return id of last processed update or confirm them all
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
